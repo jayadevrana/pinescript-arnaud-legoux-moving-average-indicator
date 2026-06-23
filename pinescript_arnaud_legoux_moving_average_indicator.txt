@@ -1,0 +1,16 @@
+//@version=5
+indicator(title = "Arnaud Legoux Moving Average", shorttitle="ALMA", overlay=true, timeframe="", timeframe_gaps=true)
+source = close
+windowsize = input(title="Window Size", defval=9)
+offset = input.float(title="Offset", defval=0.85)
+sigma = input.float(title="Sigma", defval=6)
+//plot(ta.alma(source, windowsize, offset, sigma), color = color.white,linewidth = 2)
+alma = ta.alma(source, windowsize, offset, sigma)
+
+buy = ta.crossover(close,alma) and barstate.isconfirmed
+sell = ta.crossunder(close,alma) and barstate.isconfirmed
+
+plotshape(series = buy,color = color.green,text = "Buy",textcolor = color.white,style = shape.triangleup,location = location.belowbar , size = size.small)
+plotshape(series = sell,color = color.red,text = "Sell",textcolor = color.white,style = shape.triangledown,location = location.abovebar , size = size.small)
+
+barcolor(close > alma ? color.blue:color.red)
